@@ -1,0 +1,28 @@
+title = "Map"
+url = "/map"
+layout = "default"
+is_hidden = 0
+
+[googleMap]
+latitude = 43.589046
+longitude = -79.644119
+zoom = 12
+width = "100%"
+height = "350px"
+mapTypeId = "ROADMAP"
+showMarker = "true"
+apiKey = "AIzaSyC4bDm_E5WDgZhCJGdOMkVyJ0vXjhu3NWg"
+==
+{% partial 'jumbotron'
+styles = "bg-primary text-light text-center"
+title = "Properties on the map"
+lead = ""
+%}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% component 'googleMap' %}
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-var shaven = require('shaven');
+var shaven = require('shaven').default;
 
 var SVG = require('../svg');
 var constants = require('../constants');
@@ -77,7 +77,6 @@ module.exports = function (sceneGraph, renderSettings) {
       var word = line.children[wordKey];
       var x = textGroup.x + line.x + word.x;
       var y = textGroup.y + line.y + word.y;
-
       var wordTag = templates.element({
         'tag': 'text',
         'content': word.properties.text,
@@ -145,10 +144,15 @@ module.exports = function (sceneGraph, renderSettings) {
     'preserveAspectRatio': 'none'
   });
 
-  var output = shaven(svg);
-  
-  output = stylesheetXml + output[0];
+  var output = String(shaven(svg));
+
+  if (/\&amp;(x)?#[0-9A-Fa-f]/.test(output[0])) {
+    output = output.replace(/&amp;#/gm, '&#');
+  }
+
+  output = stylesheetXml + output;
 
   var svgString = SVG.svgStringToDataURI(output, renderSettings.mode === 'background');
+
   return svgString;
 };

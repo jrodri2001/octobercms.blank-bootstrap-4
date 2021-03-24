@@ -1,0 +1,29 @@
+description = "Video content"
+==
+<div class="container-fluid p-3 my-3 {{styles}}">
+    <div class="row">
+        <div class="col">
+            <div class="container p-5 my-3 {{styles}}">
+                <div class="row {{row_styles}}">
+                    <div class="col-lg">
+                        <!-- 16:9 aspect ratio -->
+                        <div class="embed-responsive embed-responsive-16by9">
+                          <iframe class="embed-responsive-item" src="{{video_url}}"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg">
+                      <h1 class="display-5"> {{title}}</h1>
+                      <p class="lead">{{lead}}</p>
+                      {% if content %}
+                          {% content content %}
+                      {% endif %}
+                        {% if button_text %}
+                            <a type="button" class="btn {{button_styles}}" href="{{button_url}}">{{button_text}}</a>
+                        {% endif %}
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

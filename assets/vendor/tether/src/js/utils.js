@@ -17,15 +17,19 @@ function getActualBoundingClientRect(node) {
     rect[k] = boundingRect[k];
   }
 
-  if (node.ownerDocument !== document) {
-    let frameElement = node.ownerDocument.defaultView.frameElement;
-    if (frameElement) {
-      let frameRect = getActualBoundingClientRect(frameElement);
-      rect.top += frameRect.top;
-      rect.bottom += frameRect.top;
-      rect.left += frameRect.left;
-      rect.right += frameRect.left;
+  try {
+    if (node.ownerDocument !== document) {
+      let frameElement = node.ownerDocument.defaultView.frameElement;
+      if (frameElement) {
+        let frameRect = getActualBoundingClientRect(frameElement);
+        rect.top += frameRect.top;
+        rect.bottom += frameRect.top;
+        rect.left += frameRect.left;
+        rect.right += frameRect.left;
+      }
     }
+  } catch (err) {
+    // Ignore "Access is denied" in IE11/Edge
   }
 
   return rect;
@@ -55,7 +59,7 @@ function getScrollParents(el) {
     }
 
     const {overflow, overflowX, overflowY} = style;
-    if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
+    if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
       if (position !== 'absolute' || ['relative', 'absolute', 'fixed'].indexOf(style.position) >= 0) {
         parents.push(parent)
       }
@@ -63,12 +67,12 @@ function getScrollParents(el) {
   }
 
   parents.push(el.ownerDocument.body);
-  
+
   // If the node is within a frame, account for the parent window scroll
   if (el.ownerDocument !== document) {
     parents.push(el.ownerDocument.defaultView);
   }
-  
+
   return parents;
 }
 
@@ -84,7 +88,7 @@ const getOrigin = () => {
   // are equivilant or not.  We place an element at the top left of the page that will
   // get the same jitter, so we can cancel the two out.
   let node = zeroElement;
-  if (!node) {
+  if (!node || !document.body.contains(node)) {
     node = document.createElement('div');
     node.setAttribute('data-tether-id', uniqueId());
     extend(node.style, {
@@ -155,7 +159,11 @@ function getOffsetParent(el) {
   return el.offsetParent || document.documentElement;
 }
 
+let _scrollBarSize = null;
 function getScrollBarSize() {
+  if (_scrollBarSize) {
+    return _scrollBarSize;
+  }
   const inner = document.createElement('div');
   inner.style.width = '100%';
   inner.style.height = '200px';
@@ -188,7 +196,8 @@ function getScrollBarSize() {
 
   const width = widthContained - widthScroll;
 
-  return {width, height: width};
+  _scrollBarSize = {width, height: width};
+  return _scrollBarSize;
 }
 
 function extend(out={}) {

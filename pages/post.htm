@@ -1,0 +1,86 @@
+title = "post"
+url = "/blog/post/:slug?"
+layout = "default"
+is_hidden = 0
+
+[blogPost]
+slug = "{{ :slug }}"
+categoryPage = "blog"
+
+[blogPosts]
+pageNumber = "{{ :page }}"
+postsPerPage = 10
+noPostsMessage = "No posts found"
+sortOrder = "published_at desc"
+categoryPage = "blog-category"
+postPage = "post"
+
+[nextAndPrev]
+category = "current"
+postPage = "post"
+==
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-9 col-sm-12">
+            <h2>{{post.title}}</h2>
+            <p class="text-muted">{{"Posted"|_}} {{post.published_at|date}}</p>
+            
+            {% if post.featured_images.count %}
+                
+                {% for image in post.featured_images %}
+                   
+                        <img
+                            data-src="{{ image.filename }}"
+                            src="{{ image.path }}"
+                            alt="{{ image.description }}"
+                            style="max-width: 100%" />
+
+                {% endfor %}
+                
+            {% endif %}
+            
+            <div class="content my-4 py-2">{{ post.content_html | raw }}</div>
+        </div>
+        <div class="col-lg-3 col-sm-12 ">
+            <h4 class="text-dark">{{"Other Posts"|_}}</h4>
+            {% for post in posts %}
+            <ul class="list-unstyled">
+                <li><a href="{{post.url}}">{{post.title}}</a></li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="row py-3">
+        {% if prevPost %}
+            <div class="prevPost-post col-sm-6">
+                <span class="small-title"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{"Previous Post"|_}}</span>
+                <h4><a href="{{prevPost.url}}" title="{{ prevPost.title }}">{{ prevPost.title }}</a></h4>
+                <span class="small text-muted">
+                    {% if date(prevPost.published_at) > date('-7days') %}
+                        {{ prevPost.published_at | time_diff }}
+                    {% else %}
+                        <time datetime="{{ prevPost.published_at|date('Y-m-d\TH:i:sP') }}"> {{ prevPost.published_at | strftime('%A') }}, {{ prevPost.published_at | strftime('%e %B %Y') }}</time>
+                    {% endif %}
+        
+                    <meta itemprop="datePublished" content="{{ prevPost.published_at|date('Y-m-dTH:i:sZ') }}"/>
+                </span>
+            </div>
+        {% endif %}
+        {% if nextPost %}
+            <div class="nextPost-post col-sm-6 text-right">
+                <span class="small-title">{{"Next Post"|_}} <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                <h4><a href="{{nextPost.url}}" title="{{ nextPost.title }}">{{ nextPost.title }}</a></h4>
+                <span class="small text-muted">
+                    {% if date(nextPost.published_at) > date('-7days') %}
+                        {{ nextPost.published_at | time_diff }}
+                    {% else %}
+                        <time datetime="{{ nextPost.published_at|date('Y-m-d\TH:i:sP') }}">  {{ nextPost.published_at | strftime('%A') }}, {{ nextPost.published_at | strftime('%e %B %Y') }}</time>
+                    {% endif %}
+                    <meta itemprop="datePublished" content="{{ nextPost.published_at|date('Y-m-dTH:i:sZ') }}"/>
+                </span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% component 'nextAndPrev' %}

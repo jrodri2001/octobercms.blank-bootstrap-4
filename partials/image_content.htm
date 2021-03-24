@@ -1,0 +1,30 @@
+description = "Image Content"
+==
+<div class="container-fluid p-3 my-3 {{styles}}">
+    <div class="row">
+        <div class="col">
+            <div class="container {{styles}}">
+                <div class="row {{row_styles}}">
+                    {% if image_align == 'right'%}
+                    <div class="col-lg align-self-center order-last">
+                        {% else %}
+                        <div class="col-lg align-self-center">
+                            {% endif %}
+                            <img src="{{ image |theme}}" class="img-fluid" alt="{{image_alt}}">
+                        </div>
+                        <div class="col-lg">
+                            <h1 class="display-5"> {{title}}</h1>
+                            <p class="lead">{{lead}}</p>
+                            {% if content %}
+                            {% content content %}
+                            {% endif %}
+                            {% if button_text %}
+                            <a type="button" class="btn {{button_styles}}" href="{{button_url}}">{{button_text}}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

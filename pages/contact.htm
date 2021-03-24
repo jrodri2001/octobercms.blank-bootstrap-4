@@ -1,0 +1,68 @@
+title = "contact"
+url = "/contact"
+layout = "default"
+description = "Contact Lisbeth Herrera"
+meta_title = "Contact Lisbeth Herrera"
+meta_description = "Contact page for Lisbeth Herrera Team"
+is_hidden = 0
+
+[viewBag]
+localeDescription[es] = "Contactar a Lisbeth Herrera"
+
+[contactForm]
+==
+<div class="container my-3">
+    <div class="row equal">
+        <div class="col-md mb-2">
+            <div class="card text-primary h-100">
+                <div class="card-body text-center">
+                    <i class="fa fa-phone fa-5x mb-3" aria-hidden="true"></i>
+                    <h4 class="text-uppercase mb-1">call us</h4>
+                    <p>(647) 833.1171</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md mb-2">
+             <div class="card text-primary h-100">
+                <div class="card-body text-center">
+                    <i class="fa fa-envelope fa-5x mb-3" aria-hidden="true"></i>
+                    <h4 class="text-uppercase mb-1">Email Us</h4>
+                    <p><a href="mailto:info@lisbethherrera.com">info@lisbethherrera.com</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md mb-2">
+             <div class="card text-primary h-100">
+                <div class="card-body text-center">
+                    <i class="fa fa-map-marker fa-5x mb-3" aria-hidden="true"></i>
+                    <h4 class="text-uppercase mb-1">Visit Us</h4>
+                    <p>6285 Miller's Groove, Mississauga, ON L5N 3C6</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-primary rounded-0">
+                <div class="card-header p-0">
+                    <div class="bg-primary text-white text-center py-2">
+                        <h3><i class="fa fa-envelope"></i> {{ "Contact Lisbeth Herrera" |_}}</h3>
+                        <p class="m-0">{{ "We are here to help you" |_}}</p>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    {% component 'contactForm' %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 py-4">
+            <h1>{{"More information"|_}}</h1>
+            <p>{{"mail_contact_side_message"|_}}</p>
+            <p><strong>{{"Phone"|_}}:</strong> (647) 833.1171</p>
+            <p><strong>{{"Email"|_}}:</strong> <a href="mailto:info@lisbethherrera.com">info@lisbethherrera.com</a></p>      
+        </div>
+    </div>
+</div>

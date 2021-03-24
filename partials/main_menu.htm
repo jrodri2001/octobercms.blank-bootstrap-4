@@ -1,0 +1,39 @@
+description = "Main Menu"
+
+[localePicker]
+forceUrl = 0
+==
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">
+      <img src="{{ '/assets/images/logos/Horizontal.png'|theme }}" class="img-fluid" style="max-width: 300px" alt="Lisbeth Herrera Team logo">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      	<li class="nav-item{{ this.page.baseFileName == 'home' ? ' active' }}">
+			<a class="nav-link" href="{{ 'home'|page }}">{{ 'home' |_ }}</a>
+		</li>
+		<li class="nav-item{{ this.page.baseFileName == 'contact' ? ' active' }}">
+			<a class="nav-link" href="{{ 'contact'|page }}">{{ 'contact' |_ }}</a>
+		</li>
+		<li class="nav-item{{ this.page.baseFileName == 'blog' ? ' active' }}{{ this.page.baseFileName == 'post' ? ' active' }}">
+			<a class="nav-link" href="{{ 'blog'|page }}">{{ 'Blog' |_ }}</a>
+		</li>
+		<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle{{ this.page.baseFileName == 'mortgage-calculator' ? ' active' }}" href="#" id="calculators" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{"Calculators"|_}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="calculators">
+              <a class="dropdown-item{{ this.page.baseFileName == 'mortgage-calculator' ? ' active' }}" href="{{ 'mortgage-calculator'|page }}">{{ 'Mortgage Calculator' |_ }}</a>
+              <a class="dropdown-item" href="#">{{"Gian"|_}}</a>
+            </div>
+        </li>
+    </ul>
+    <form class="form-inline">
+	    {% component 'localePicker' %}
+	</form>
+  </div>
+</nav>

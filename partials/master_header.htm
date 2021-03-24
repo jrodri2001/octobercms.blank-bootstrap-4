@@ -1,0 +1,10 @@
+description = "master header"
+==
+<!-- Masthead-->
+<header class="masthead" style="background-image: url({{ bg_image |theme }})">
+    <div class="container-fluid">
+        <div class="masthead-subheading">{{ subtitle |_}}</div>
+        <div class="masthead-heading text-uppercase">{{ main_text |_}}</div>
+        <a class="btn btn-primary {%if button_styles %} {{button_styles}}{%endif%}" href="{{button_url}}">{{ button_text |_}}</a>
+    </div>
+</header>

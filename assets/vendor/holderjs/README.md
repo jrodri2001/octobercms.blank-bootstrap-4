@@ -4,15 +4,19 @@
 
 Holder renders image placeholders on the client side using SVG.
 
-Used by [Bootstrap](http://getbootstrap.com), thousands of [open source projects](https://github.com/search?q=holder.js+in%3Apath&type=Code&ref=searchresults), and [many](https://search.nerdydata.com/search/#!/searchTerm=holder.js/searchPage=1/sort=pop) [other](http://libscore.com/#Holder) sites.
+Used by [Bootstrap](http://getbootstrap.com), thousands of [open source projects](https://github.com/search?q=holder.js+in%3Apath&type=Code&ref=searchresults), and [many](https://nerdydata.com/technology-reports/Holder.js/1cf03fe7-0e02-40ef-be69-f00ca9547fc9) [other](http://libscore.com/#Holder) sites.
 
-[![Build Status](https://travis-ci.org/imsky/holder.svg?branch=master)](https://travis-ci.org/imsky/holder)
+[![npm](https://img.shields.io/npm/v/holderjs.svg)](https://www.npmjs.com/package/holderjs)
+[![Travis Build Status](https://img.shields.io/travis/imsky/holder.svg)](https://travis-ci.org/imsky/holder)
+[![Package Quality](http://npm.packagequality.com/shield/holderjs.svg)](http://packagequality.com/#?package=holderjs)
+[![NerdyData Popularity](https://badges.nerdydata.com/1cf03fe7-0e02-40ef-be69-f00ca9547fc9)](https://nerdydata.com/technology-reports/Holder.js/1cf03fe7-0e02-40ef-be69-f00ca9547fc9)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/holderjs/badge?style=rounded)](https://www.jsdelivr.com/package/npm/holderjs)
 
-[![Package Quality](http://npm.packagequality.com/badge/holderjs.png)](http://packagequality.com/#?package=holderjs)
 
 ## Installing
 
 * [npm](http://npmjs.com/): `npm install holderjs`
+* [yarn](http://yarnpkg.com/): `yarn add holderjs`
 * [Bower](http://bower.io/): `bower install holderjs`
 * [RawGit](http://rawgit.com): <https://cdn.rawgit.com/imsky/holder/master/holder.js>
 * [cdnjs](http://cdnjs.com/): <http://cdnjs.com/libraries/holder>
@@ -77,12 +81,12 @@ There are 6 default themes: ``sky``, ``vine``, ``lava``, ``gray``, ``industrial`
 
 #### Customizing themes
 
-Themes have 5 properties: ``foreground``, ``background``, ``size``, ``font`` and ``fontweight``. The ``size`` property specifies the minimum font size for the theme. The ``fontweight`` default value is ``bold``. You can create a sample theme like this:
+Themes have 5 properties: ``fg``, ``bg``, ``size``, ``font`` and ``fontweight``. The ``size`` property specifies the minimum font size for the theme. The ``fontweight`` default value is ``bold``. You can create a sample theme like this:
 
 ```js
 Holder.addTheme("dark", {
-  background: "#000",
-  foreground: "#aaa",
+  bg: "#000",
+  fg: "#aaa",
   size: 11,
   font: "Monaco",
   fontweight: "normal"
@@ -92,7 +96,7 @@ Holder.addTheme("dark", {
 If you have a group of placeholders where you'd like to use particular text, you can do so by adding a ``text`` property to the theme:
 
 ```js
-Holder.addTheme("thumbnail", { background: "#fff", text: "Thumbnail" });
+Holder.addTheme("thumbnail", { bg: "#fff", text: "Thumbnail" });
 ```
 
 #### Using custom themes
@@ -108,7 +112,7 @@ The first approach is the easiest. After you include ``holder.js``, add a ``scri
 <script src="holder.js"></script>
 <script>
 Holder.addTheme("bright", {
-  background: "white", foreground: "gray", size: 12
+  bg: "white", fg: "gray", size: 12
 });
 </script>
 ```
@@ -116,7 +120,7 @@ Holder.addTheme("bright", {
 The second approach requires that you call ``run`` after you add the theme, like this:
 
 ```js
-Holder.addTheme("bright", {background: "white", foreground: "gray", size: 12}).run();
+Holder.addTheme("bright", {bg: "white", fg: "gray", size: 12}).run();
 ```
 
 #### Using custom themes and domain on specific images
@@ -132,8 +136,8 @@ Holder.run({
   domain: "example.com",
   themes: {
     "simple": {
-      background: "#fff",
-      foreground: "#000",
+      bg: "#fff",
+      fg: "#000",
       size: 12
     }
   },
@@ -147,8 +151,8 @@ You can add a placeholder programmatically by chaining Holder calls:
 
 ```js
 Holder.addTheme("new", {
-  foreground: "#ccc",
-  background: "#000",
+  fg: "#ccc",
+  bg: "#000",
   size: 10
 }).addImage("holder.js/200x100?theme=new", "body").run();
 ```
@@ -167,6 +171,12 @@ If you would like to disable line wrapping, set the `nowrap` option to `true`:
 
 ```html
 <img data-src="holder.js/300x200?text=Add \n line breaks \n anywhere.&amp;nowrap=true">
+```
+
+When using the `text` option, the image dimesions are not shown. To reinsert the dimension into the text, simple use the special `holder_dimensions` placeholder. 
+
+```html
+<img data-src="holder.js/90px80p?theme=sky&text=Placeholder dimensions: holder_dimensions">
 ```
 
 Placeholders using a custom font are rendered using canvas by default, due to SVG's constraints on cross-domain resource linking. If you're using only locally available fonts, you can disable this behavior by setting `noFontFallback` to `true` in `Holder.run` options. However, if you need to render a SVG placeholder using an externally loaded font, you have to use the `object` tag instead of the `img` tag and add a `holderjs` class to the appropriate `link` tags. Here's an example:
@@ -259,6 +269,8 @@ Holder provides several options at runtime that affect the process of image gene
 * `objects`: The CSS selector used for finding `object` placeholders. Default value: `object`.
 * `bgnodes`: The CSS selector used for finding elements that have background palceholders. Default value: `body .holderjs`.
 * `stylenodes`: The CSS selector used for finding stylesheets to import into SVG placeholders. Default value: `head link.holderjs`.
+* `noFontFallback`: Do not fall back to canvas if using custom fonts.
+* `noBackgroundSize`: Do not set `background-size` for background placeholders.
 
 ### Using custom settings on load
 
@@ -269,13 +281,31 @@ You can prevent Holder from running its default configuration by executing ``Hol
 
 Holder is compatible with ``lazyload.js`` and works with both fluid and fixed-width images. For best results, run `.lazyload({skip_invisible:false})`.
 
+## Using with Vue
+
+You can use Holder in Vue 2+ projects with [vue-holderjs](https://github.com/boogermann/vue-holderjs).
+
 ## Using with Angular.js
 
-You can use Holder in Angular projects with [ng-holder](https://github.com/joshvillbrandt/ng-holder).
+You can use Holder in Angular projects with [ng-holder](https://github.com/joshvillbrandt/ng-holder) or with [angular-2-holderjs](https://github.com/aogriffiths/angular-2-holderjs) for Angular 2 projects.
 
 ## Using with Meteor
 
 Because Meteor includes scripts at the top of the document by default, the DOM may not be fully available when Holder is called. For this reason, place Holder-related code in a "DOM ready" event listener.
+
+## Using with Webpack
+
+If you're using `ProvidePlugin` in your Webpack config, make sure to configure it as follows:
+
+```js
+plugins: [
+  new webpack.ProvidePlugin({
+    'Holder': 'holderjs',
+    'holder': 'holderjs',
+    'window.Holder': 'holderjs'
+  })
+]
+```
 
 ## Browser support
 
@@ -285,6 +315,11 @@ Because Meteor includes scripts at the top of the document by default, the DOM m
 * Internet Explorer 9+ (with partial support for 6-8)
 * Opera 12+
 * Android (with fallback)
+
+## Source
+
+* GitHub: <https://github.com/imsky/holder>
+* GitLab: <https://gitlab.com/imsky/holder>
 
 ## License
 

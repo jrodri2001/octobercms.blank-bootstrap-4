@@ -1,0 +1,29 @@
+description = "Blurb"
+==
+<div class="card {% if card_styles is defined%}{{card_styles}}{% endif %}">
+    {%if image is defined %}
+     <img class="card-img-top" src="{{ image }}" alt="Card image cap">
+    {% endif %}
+    
+  <div class="card-body">
+    {%if icon is defined %}
+    <i class="fa fa-{{icon}} fa-5x mb-3" aria-hidden="true"></i>
+    {% endif%}
+    
+    
+    {% if title is defined %}
+    <h5 class="card-subtitle mb-2">{{title |capitalize}}</h5>
+    {% endif%}
+    
+    {% if subtitle is defined %}
+    <h6 class="card-subtitle mb-2 text-muted">{{subtitle}}</h6>
+    {% endif%}
+    
+    <p class="card-text">{{content|_}}</p>
+    
+    {% if button is defined %}
+    <a {% if target %} target="{{target}}"{% endif %} href="{{button_url}}" class="btn btn-primary {% if button_styles is defined%} {{ button_styles }} {% else %} btn-outline-light my-2 {% endif %}">{{button |capitalize}}</a>
+    {% endif %}
+    
+  </div>
+</div>

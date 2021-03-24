@@ -1,0 +1,373 @@
+title = "mortgage calculator"
+url = "/mortgage-calculator"
+layout = "default"
+is_hidden = 0
+==
+<?php
+function onStart()
+{
+    $this->addJs('assets/js/calcscript.js');
+}
+?>
+==
+{% partial 'jumbotron'
+styles = "bg-primary text-light text-center"
+title = "Calculate your next mortgage"
+lead = "Do you want to find out how much your next mortgage will be, lets begin"
+icon = "calculator"
+%}
+
+
+<div class="container my-4 py-3">
+		  <form name="calculateThis" method="get">
+			<input type="hidden" name="io_listing_afford" value="">
+			<input type="hidden" name="io_gds" value="32.00">
+			<input type="hidden" name="io_heating" value="0">
+
+			<div class="row">
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <label class="col-sm-12 control-label" for="io_price">Listing Price</label>
+				  <input name="io_price" type="text" value=""  id="io_price" class="form-control input-md">
+				</div>
+			  </div>
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <label class="col-sm-12 control-label" for="io_interest">Interest Rate</label>
+				  <input name="io_interest" type="text" value="5.25" id="io_interest" class="form-control input-md">
+				</div>
+			  </div>
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <label class="col-sm-12 control-label" for="io_taxes">Taxes (Anual)</label>
+				  <input name="io_taxes" type="text" value="" id="io_taxes" class="form-control input-md">
+				</div>
+			  </div>
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <label class="col-sm-12 control-label" for="io_condo">Condo fees</label>
+				  <input name="io_condo" type="text" value="" id="io_condo" class="form-control input-md">
+				</div>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="col-sm-6">
+				<div class="form-group">
+				  <label class="col-sm-12 control-label" for="io_amortization">Amortization</label>
+				  <select name="io_amortization" onchange="doCalc();" class="form-control" id="io_amortization">
+					<option value="10">10 years</option>
+					<option value="15">15 years</option>
+					<option value="20">20 years</option>
+					<option value="25" selected="selected">25 years</option>
+					<option value="30">30 years</option>
+					<option value="35">35 years</option>
+					<option value="40">40 years</option>
+				  </select>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-lg-6 col-sm-12">				
+				<div class="form-group">
+					<button id="calculateBtn" type="button" class="btn btn-primary btn-lg btn-block">
+					  <span class="glyphicon glyphicon-th" aria-hidden="true"></span> Calculate
+					</button>
+				</div>				  
+			  </div>
+			  
+			  <div class="col-lg-6 col-sm-6">
+				  <div class="form-group">
+					<input id="resetBtn" class="btn btn-secondary btn-lg btn-block" type="reset" value="Reset">
+				  </div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <select id="percent_down1" name="percent_down1" onchange="doCalc();" class="form-control">
+					<option value="0">0%</option>
+					<option value="05" selected="selected">5%</option>
+					<option value="15">15%</option>
+					<option value="20">20%</option>
+					<option value="25">25%</option>
+					<option value="30">30%</option>
+					<option value="35">35%</option>
+					<option value="40">40%</option>
+					<option value="45">45%</option>
+					<option value="50">50%</option>
+				  </select>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <select id="percent_down2" name="percent_down2" onchange="doCalc();" class="form-control">
+					<option value="0">0%</option>
+					<option value="05">5%</option>
+					<option value="10" selected="selected">10%</option>
+					<option value="15">15%</option>
+					<option value="20">20%</option>
+					<option value="25">25%</option>
+					<option value="30">30%</option>
+					<option value="35">35%</option>
+					<option value="40">40%</option>
+					<option value="45">45%</option>
+					<option value="50">50%</option>
+				  </select>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <select name="percent_down3" onchange="doCalc();" class="form-control">
+					<option value="0">0%</option>
+					<option value="05">5%</option>
+					<option value="10">10%</option>
+					<option value="15" selected="selected">15%</option>
+					<option value="20">20%</option>
+					<option value="25">25%</option>
+					<option value="30">30%</option>
+					<option value="35">35%</option>
+					<option value="40">40%</option>
+					<option value="45">45%</option>
+					<option value="50">50%</option>
+				  </select>
+				</div>
+			  </div>
+			</div>
+
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Downpayment
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="down_payment1" id="down_payment1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="down_payment2"  id="down_payment2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="down_payment3" id="down_payment3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Mortgage
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="first_mortgage1" id="first_mortgage1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="first_mortgage2"  id="first_mortgage2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="first_mortgage3"  id="first_mortgage3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				CMHC/GE Premium
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="cmhc1"  id="cmhc1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="cmhc2"  id="cmhc2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="cmhc3"  id="cmhc3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Financing
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="total_financing1"  id="total_financing1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="total_financing2"  id="total_financing2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="total_financing3"  id="total_financing3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Monthly payment
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="monthly_payment1" id="monthly_payment1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="monthly_payment2" id="monthly_payment2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="monthly_payment3" id="monthly_payment3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Expenses
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="expenses1" id="expenses1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="expenses2" id="expenses2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="expenses3" id="expenses3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Total Payment
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="total_payment1" id="total_payment1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="total_payment2" id="total_payment2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="total_payment3" id="total_payment3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+			<div class="row">
+			  <div class="col-sm-3">
+				Required Income
+			  </div>
+
+			  <div class="col-sm-3">
+				<div class="form-group">
+				  <input type="text" name="income_required1" id="income_required1" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="income_required2" id="income_required2" class="form-control input-md" readonly>
+				</div>
+			  </div>
+
+			  <div class="col-sm-3 hidden-xs">
+				<div class="form-group">
+				  <input type="text" name="income_required3" id="income_required3" class="form-control input-md" readonly>
+				</div>
+			  </div>
+			</div>
+
+
+			<div class="row">
+			  <div class="col-sm-12">
+				<p>*Estimated calculations, actual results may differ</p>
+			  </div>
+			</div>
+		  </form>
+		</div>
+
+
+
+
+
+	  </div>
+	  <!-- #left-area -->
+
+	  <?php get_sidebar();
+	  ?>
+
+	</div>
+	<!-- #content-area -->
+
+  </div>
+  <!-- .container -->
+  
+  
+  {% put scripts %}
+  <script>
+  $(document).ready(function() {
+	$('#calculateBtn').on('click',function(event){
+	  event.preventDefault();
+	  doCalc();
+	});
+  });
+  </script>
+  {% endput %}

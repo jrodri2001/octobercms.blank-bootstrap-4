@@ -1,0 +1,233 @@
+title = "home"
+url = "/"
+layout = "default"
+description = "Site Homepage"
+meta_title = "Lisbeth Herrera"
+meta_description = "Lisbeth Herrera Website"
+is_hidden = 0
+
+[viewBag]
+localeTitle[es] = "inicio"
+localeUrl[es] = "/"
+localeDescription[es] = "Pagina de Inicio"
+
+[mailSignup]
+list = 46183
+==
+{% partial 'master_header'
+bg_image="assets/images/big-modern-art.jpg"
+button_text="contact"
+buton_url="/contact"
+main_text="We can help you"
+subtitle="looking for a place to call home?"
+button_styles="btn-lg text-uppercase"
+%}
+
+{% partial 'jumbotron'
+styles = "bg-primary text-light text-center"
+title = "Interested in relocating to Ontario?"
+lead = "We are specialists in the process of relocation between provinces"
+button_text ="contact"
+button_url="/contact"
+button_styles="btn-outline-light btn-lg text-uppercase"
+%}
+
+
+{% partial 'image_content'
+row_styles = "text-center"
+title = "Moving to ontario?"
+lead = "We are specialists in the process of relocation between provinces"
+image = 'assets/images/logos/Moving-Boxes-Slide-1110x550.jpg'
+content = "moving_to_ontario"
+image_align = 'left'
+button_text ="Live in Ontario"
+button_url="/live_in_ontario"
+button_styles="btn-primary"
+%}
+
+{% partial 'video_content'
+styles= "bg-primary text-light"
+row_styles = "text-justify"
+title = "We can help you get yor new home"
+lead = "We have at your disposal an extensive database of properties available around the city. Contact me to give you more information."
+video_url = 'https://www.youtube.com/embed/gJWwFJmexso'
+image_align = 'left'
+button_text ="Contact Us"
+button_url="/contact"
+button_styles="btn-outline-light"
+%}
+
+<div class="container my-3 py-3">
+    <div class="row py-3 text-center">
+        <div class="col">
+            <h2 class="text-primary display-2"> Some of our services</h2>
+            <h3 class="text-muted lead">We can help you in many ways, but here are some of the most common services we provide</h3>
+        </div>
+    </div>
+    <div class="row py-5">
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            {% partial 'blurb'
+            card_styles="text-primary text-lg-left text-center border-0"
+            icon = "tags"
+            title = "sell"
+            content = "Are you looking to get the return on your investment by selling your property? Do you need a bigger space, maybe?"
+            %}
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            {% partial 'blurb'
+            card_styles="text-primary text-lg-left text-center border-0"
+            icon = "shopping-cart"
+            title = "buy"
+            content = "Looking for the home of your dreams? We offer you the best orientation in the process to guarantee your happiness and financial success"
+            %}
+        </div>
+         <div class="col-lg-3 col-md-6 col-xs-12">
+            {% partial 'blurb'
+            card_styles="text-primary text-lg-left text-center border-0"
+            icon = "key"
+            title = "rent"
+            content = "Do you need a temporary place to stay? We have excellent options to accommodate you and your family"
+            %}
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            {% partial 'blurb'
+            card_styles="text-primary text-lg-left text-center border-0"
+            icon = "line-chart"
+            title = "invest"
+            content = "Thinking about investing in real estate? Excellent choice! Contact me and I’ll help you find the best way to grow your capital"
+            %}
+        </div>
+    </div>
+</div>
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {% partial 'jumbotron'
+            styles="text-light bg-primary text-center border-0 py-5"
+            title = "Contact Lisbeth Herrera"
+            button_text = "Contact"
+            button_url = "/contact"
+            button_styles = "btn-outline-light mt-4"
+            %}
+        </div>
+    </div>
+</div>
+
+<div class="container my-3">
+    <div class="row equal">
+        <div class="col-lg-3 col-md-6 col-xs-12 p-2">
+            {% partial 'blurb'
+            card_styles="text-light bg-primary text-center border-0 h-100"
+            icon = "usd"
+            title = "home worth"
+            content = "Do you know what’s your home worth?"
+            button = "check it out"
+            button_url = "http://listings.lisbethherrera.com/images/landing/homeworth/index.asp"
+            target="_blank"
+            %}
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12 p-2">
+            {% partial 'blurb'
+            card_styles="text-light bg-primary text-center border-0 h-100"
+            icon = "road"
+            title = "Street match"
+            content = "Get instant updates when houses in your street are for sale"
+            button = "get updates"
+            button_url = "http://listings.lisbethherrera.com/images/landing/streetmatch/index.asp"
+            target="_blank"
+            %}
+        </div>
+         <div class="col-lg-3 col-md-6 col-xs-12 p-2">
+            {% partial 'blurb'
+            card_styles="text-light bg-primary text-center border-0 h-100"
+            icon = "bell"
+            title = "Listing alerts"
+            content = "Get free daily listings alerts"
+            button = "get alerts"
+            button_url = "http://listings.lisbethherrera.com/images/landing/buyer_1.1/index.asp"
+            target="_blank"
+            %}
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12 p-2">
+            {% partial 'blurb'
+            card_styles="text-light bg-primary text-center border-0 h-100"
+            icon = "binoculars"
+            title = "Search Communities"
+            content = "Search listings in different cities/communities"
+            button = "search"
+            button_url = "http://listings.lisbethherrera.com/communities/"
+            target="_blank"
+            %}
+        </div>
+    </div>
+</div>
+
+
+{% partial 'jumbotron'
+icon = "envelope"
+styles = "bg-primary text-light text-center my-5 py-5"
+title = "Sign Up to Our Newsletter"
+lead = "You will get interesting articles and relevant information about Real Estate"
+%}
+
+<div class="container my-5 py-3">
+    <div class="row">
+        <div class="col-lg-8 col-xs-12 p-5 order-1 order-sm-12">
+            <form
+                id="subscribe-form"
+                data-request="mailSignup::onSignup"
+                data-request-update="'mailSignup::result': '#subscribe-form'"
+            >
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+                <label for="fname">First Name</label>
+                <input name="merge[FNAME]" type="text" class="form-control" id="fname" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="lname">Last Name</label>
+                <input name="merge[LNAME]" type="text" class="form-control" id="lname" placeholder="First Name">
+            </div>
+                <input type="submit" class="btn btn-primary" value="Subscribe"/>
+            </form>
+        </div>
+         <div class="col-lg-4 col-xs-12 p-5 order-12 order-xs-1">
+         <h5>Sign up to our newsletter</h5>
+         <p>When you sign up, we will keep you up to date with the most recent information about the Real Estate market.</p>
+         <ul class="">
+             <li>Real Estate news</li>
+             <li>House comparables</li>
+             <li>Market Analisis</li>
+             <li>And much more</li>
+         </ul>
+         </div>
+    </div>
+</div>
+
+{% partial 'jumbotron'
+styles = "bg-primary text-light text-center"
+title = "Check out our latest posts on Instagram"
+lead = "Follow us in our social media"
+icon = "instagram"
+%}
+<div class="container">
+    <div class="row text-primary">
+        <div class="col">
+            <!-- Place <div> tag where you want the feed to appear -->
+            <h1><i class="fa fa-instagram"></i> Instagram Feed</h1>
+            <div id="curator-feed-default-feed-layout"><a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+/* curator-feed-default-feed-layout */
+(function(){
+var i, e, d = document, s = "script";i = d.createElement("script");i.async = 1;
+i.src = "https://cdn.curator.io/published/3db1e819-32c1-4ed2-adfb-5ffea37dd16c.js";
+e = d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);
+})();
+</script>

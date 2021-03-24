@@ -18,7 +18,6 @@
     "animate.css": "*",
     "font-awesome": "*",
     "holderjs": "*",
-    "wow": "*",
-    "plyr": "*"
+    "wow": "*"
   }
 }

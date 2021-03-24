@@ -1,6 +1,6 @@
 /*
 Holder.js - client side image placeholders
-(c) 2012-2015 Ivan Malopinsky - http://imsky.co
+(c) 2012-2020 Ivan Malopinsky - http://imsky.co
 */
 
 //Libraries and functions
@@ -99,7 +99,8 @@ var Holder = {
 
         engineSettings.stylesheets = [];
         engineSettings.svgXMLStylesheet = true;
-        engineSettings.noFontFallback = options.noFontFallback ? options.noFontFallback : false;
+        engineSettings.noFontFallback = !!options.noFontFallback;
+        engineSettings.noBackgroundSize = !!options.noBackgroundSize;
 
         stylenodes.forEach(function (styleNode) {
             if (styleNode.attributes.rel && styleNode.attributes.href && styleNode.attributes.rel.value == 'stylesheet') {
@@ -136,7 +137,7 @@ var Holder = {
                 }
             }
 
-            if (holderURL != null) {
+            if (holderURL) {
                 var holderFlags = parseURL(holderURL, options);
                 if (holderFlags) {
                     prepareDOMElement({
@@ -310,6 +311,22 @@ function parseURL(url, instanceOptions) {
     if (parts.length === 2) {
         var options = querystring.parse(parts[1]);
 
+        // Dimensions
+
+        if (utils.truthy(options.ratio)) {
+            holder.fluid = true;
+            var ratioWidth = parseFloat(holder.dimensions.width.replace('%', ''));
+            var ratioHeight = parseFloat(holder.dimensions.height.replace('%', ''));
+
+            ratioHeight = Math.floor(100 * (ratioHeight / ratioWidth));
+            ratioWidth = 100;
+
+            holder.dimensions.width = ratioWidth + '%';
+            holder.dimensions.height = ratioHeight + '%';
+        }
+
+        holder.auto = utils.truthy(options.auto);
+
         // Colors
 
         if (options.bg) {
@@ -339,8 +356,12 @@ function parseURL(url, instanceOptions) {
             holder.textmode = options.textmode;
         }
 
-        if (options.size) {
-            holder.size = options.size;
+        if (options.size && parseFloat(options.size)) {
+            holder.size = parseFloat(options.size);
+        }
+        
+        if (options.fixedSize != null) {
+            holder.fixedSize = utils.truthy(options.fixedSize);
         }
 
         if (options.font) {
@@ -358,8 +379,6 @@ function parseURL(url, instanceOptions) {
         holder.nowrap = utils.truthy(options.nowrap);
 
         // Miscellaneous
-
-        holder.auto = utils.truthy(options.auto);
 
         holder.outline = utils.truthy(options.outline);
 
@@ -583,7 +602,10 @@ function render(renderSettings) {
     //todo: add <object> canvas rendering
     if (mode == 'background') {
         el.style.backgroundImage = 'url(' + image + ')';
-        el.style.backgroundSize = scene.width + 'px ' + scene.height + 'px';
+
+        if (!engineSettings.noBackgroundSize) {
+            el.style.backgroundSize = scene.width + 'px ' + scene.height + 'px';
+        }
     } else {
         if (el.nodeName.toLowerCase() === 'img') {
             DOM.setAttr(el, {
@@ -631,6 +653,7 @@ function render(renderSettings) {
 //todo: merge app defaults and setup properties into the scene argument
 function buildSceneGraph(scene) {
     var fontSize = App.defaults.size;
+    var fixedSize = scene.flags.fixedSize != null ? scene.flags.fixedSize : scene.theme.fixedSize;
     if (parseFloat(scene.theme.size)) {
         fontSize = scene.theme.size;
     } else if (parseFloat(scene.flags.size)) {
@@ -639,7 +662,7 @@ function buildSceneGraph(scene) {
 
     scene.font = {
         family: scene.theme.font ? scene.theme.font : 'Arial, Helvetica, Open Sans, sans-serif',
-        size: textSize(scene.width, scene.height, fontSize, App.defaults.scale),
+        size: fixedSize ? fontSize : textSize(scene.width, scene.height, fontSize, App.defaults.scale),
         units: scene.theme.units ? scene.theme.units : App.defaults.units,
         weight: scene.theme.fontweight ? scene.theme.fontweight : 'bold'
     };
@@ -1024,8 +1047,12 @@ var stagingRenderer = (function() {
                 })
             });
 
+            //Unescape HTML entities to get approximately the right width
+            var txt = DOM.newEl('textarea');
+            txt.innerHTML = htgProps.text;
+            stagingTextNode.nodeValue = txt.value;
+
             //Get bounding box for the whole string (total width and height)
-            stagingTextNode.nodeValue = htgProps.text;
             var stagingTextBBox = stagingText.getBBox();
 
             //Get line count and split the string into words

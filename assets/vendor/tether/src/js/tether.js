@@ -47,7 +47,7 @@ const position = () => {
 };
 
 function now() {
-  if (typeof performance !== 'undefined' && typeof performance.now !== 'undefined') {
+  if (typeof performance === 'object' && typeof performance.now === 'function') {
     return performance.now();
   }
   return +new Date;
@@ -576,12 +576,12 @@ class TetherClass extends Evented {
     var win = doc.defaultView;
 
     let scrollbarSize;
-    if (doc.body.scrollWidth > win.innerWidth) {
+    if (win.innerHeight > doc.documentElement.clientHeight) {
       scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
       next.viewport.bottom -= scrollbarSize.height;
     }
 
-    if (doc.body.scrollHeight > win.innerHeight) {
+    if (win.innerWidth > doc.documentElement.clientWidth) {
       scrollbarSize = this.cache('scrollbar-size', getScrollBarSize);
       next.viewport.right -= scrollbarSize.width;
     }
@@ -697,7 +697,12 @@ class TetherClass extends Evented {
           xPos = -_pos.right;
         }
 
-        css[transformKey] = `translateX(${ Math.round(xPos) }px) translateY(${ Math.round(yPos) }px)`;
+        if (typeof window.devicePixelRatio === 'number' && devicePixelRatio % 1 === 0) {
+          xPos = Math.round(xPos * devicePixelRatio) / devicePixelRatio;
+          yPos = Math.round(yPos * devicePixelRatio) / devicePixelRatio;
+        }
+
+        css[transformKey] = `translateX(${ xPos }px) translateY(${ yPos }px)`;
 
         if (transformKey !== 'msTransform') {
           // The Z transform will keep this in the GPU (faster, and prevents artifacts),
@@ -749,20 +754,31 @@ class TetherClass extends Evented {
     }
 
     if (!moved) {
-      let offsetParentIsBody = true;
-      let currentNode = this.element.parentNode;
-      while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY') {
-        if (getComputedStyle(currentNode).position !== 'static') {
-          offsetParentIsBody = false;
-          break;
+      if (this.options.bodyElement) {
+        if (this.element.parentNode !== this.options.bodyElement) {
+          this.options.bodyElement.appendChild(this.element);
+        }
+      } else {
+        let offsetParentIsBody = true;
+        function isFullscreenElement(e) {
+          let d = e.ownerDocument;
+          let fe = d.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement;
+          return fe === e;
+        }
+        let currentNode = this.element.parentNode;
+        while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY' && !isFullscreenElement(currentNode)) {
+          if (getComputedStyle(currentNode).position !== 'static') {
+            offsetParentIsBody = false;
+            break;
+          }
+
+          currentNode = currentNode.parentNode;
         }
 
-        currentNode = currentNode.parentNode;
-      }
-
-      if (!offsetParentIsBody) {
-        this.element.parentNode.removeChild(this.element);
-        this.element.ownerDocument.body.appendChild(this.element);
+        if (!offsetParentIsBody) {
+          this.element.parentNode.removeChild(this.element);
+          this.element.ownerDocument.body.appendChild(this.element);
+        }
       }
     }
 
